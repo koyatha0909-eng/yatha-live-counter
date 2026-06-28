@@ -1,68 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yatha's World - Live Visitors</title>
-
-<style>
-body{
-    margin:0;
-    background:#06111f;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-    font-family:Arial,sans-serif;
-}
-
-.card{
-    width:320px;
-    padding:30px;
-    border-radius:25px;
-    text-align:center;
-    background:#0b1b31;
-    box-shadow:0 0 25px #00ffff;
-}
-
-h1{
-    color:#22ffff;
-    text-shadow:0 0 20px cyan;
-}
-
-#count{
-    font-size:80px;
-    color:#00ffd5;
-    text-shadow:0 0 20px #00ffd5;
-    margin:25px 0;
-    font-weight:bold;
-}
-
-p{
-    color:white;
-    font-size:28px;
-}
-</style>
-</head>
-
-<body>
-
-<div class="card">
-    <h1>Yatha's World</h1>
-    <div id="count">0</div>
-    <p>Live Visitors</p>
-</div>
-
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
-getFirestore,
-doc,
-getDoc,
-updateDoc,
-increment
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  increment,
+  onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -79,20 +26,17 @@ const db = getFirestore(app);
 
 const counterRef = doc(db, "visitors", "counter");
 
-try{
-    await updateDoc(counterRef,{
-        count:increment(1)
-    });
+try {
+  await updateDoc(counterRef, {
+    count: increment(1)
+  });
 
-    const snap = await getDoc(counterRef);
-
+  onSnapshot(counterRef, (snap) => {
     document.getElementById("count").innerText = snap.data().count;
+  });
 
-}catch(e){
-    console.log(e);
+} catch (e) {
+  console.log(e);
 }
 
 </script>
-
-</body>
-</html>

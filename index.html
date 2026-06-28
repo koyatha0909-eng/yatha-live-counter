@@ -43,8 +43,8 @@ p{
     font-size:28px;
 }
 </style>
-
 </head>
+
 <body>
 
 <div class="card">
@@ -58,18 +58,17 @@ p{
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
-  getFirestore,
-  doc,
-  getDoc,
-  setDoc,
-  updateDoc,
-  increment,
-  onSnapshot
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  getDatabase,
+  ref,
+  get,
+  set,
+  onValue
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDaE8Qc2t6xsUPOTht7BjI4NPYGjxxVqQ8",
   authDomain: "for-yatha.firebaseapp.com",
+  databaseURL: "https://for-yatha-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "for-yatha",
   storageBucket: "for-yatha.firebasestorage.app",
   messagingSenderId: "345783546547",
@@ -77,31 +76,21 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const db = getDatabase(app);
 
-const counterRef = doc(db, "visitors", "counter");
+const counterRef = ref(db, "visitors/count");
 
-try {
+const snap = await get(counterRef);
 
-  const snap = await getDoc(counterRef);
-
-  if (!snap.exists()) {
-    await setDoc(counterRef, {
-      count: 0
-    });
-  }
-
-  await updateDoc(counterRef, {
-    count: increment(1)
-  });
-
-  onSnapshot(counterRef, (snap) => {
-    document.getElementById("count").innerText = snap.data().count;
-  });
-
-} catch (e) {
-  console.log(e);
+if(snap.exists()){
+    await set(counterRef, snap.val() + 1);
+}else{
+    await set(counterRef, 1);
 }
+
+onValue(counterRef,(snapshot)=>{
+    document.getElementById("count").innerText = snapshot.val();
+});
 
 </script>
 

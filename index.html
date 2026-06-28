@@ -19,51 +19,79 @@ body{
 .card{
     width:320px;
     padding:30px;
-    border-radius:20px;
-    background:#08192d;
+    border-radius:25px;
     text-align:center;
-    box-shadow:0 0 30px cyan;
+    background:#0b1b31;
+    box-shadow:0 0 25px #00ffff;
 }
 
 h1{
-    color:#33ffff;
+    color:#22ffff;
     text-shadow:0 0 20px cyan;
 }
 
 #count{
-    font-size:90px;
+    font-size:80px;
     color:#00ffd5;
-    text-shadow:0 0 25px #00ffd5;
+    text-shadow:0 0 20px #00ffd5;
+    margin:25px 0;
     font-weight:bold;
 }
 
 p{
     color:white;
-    font-size:24px;
+    font-size:28px;
 }
 </style>
-
 </head>
+
 <body>
 
 <div class="card">
-<h1>Yatha's World</h1>
-<div id="count">0</div>
-<p>Live Visitors</p>
+    <h1>Yatha's World</h1>
+    <div id="count">0</div>
+    <p>Live Visitors</p>
 </div>
 
-<script>
-let visits=localStorage.getItem("visits");
+<script type="module">
 
-if(visits==null){
-    visits=0;
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+doc,
+getDoc,
+updateDoc,
+increment
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDaE8Qc2t6xsUPOTht7BjI4NPYGjxxVqQ8",
+  authDomain: "for-yatha.firebaseapp.com",
+  projectId: "for-yatha",
+  storageBucket: "for-yatha.firebasestorage.app",
+  messagingSenderId: "345783546547",
+  appId: "1:345783546547:web:4fff1f4ad6072b6b4976c6"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const counterRef = doc(db, "visitors", "counter");
+
+try{
+    await updateDoc(counterRef,{
+        count:increment(1)
+    });
+
+    const snap = await getDoc(counterRef);
+
+    document.getElementById("count").innerText = snap.data().count;
+
+}catch(e){
+    console.log(e);
 }
 
-visits++;
-
-localStorage.setItem("visits",visits);
-
-document.getElementById("count").innerHTML=visits;
 </script>
 
 </body>

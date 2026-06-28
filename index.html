@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yatha's World - Live Visitors</title>
+
+<style>
+body{
+    margin:0;
+    background:#06111f;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    font-family:Arial,sans-serif;
+}
+
+.card{
+    width:320px;
+    padding:30px;
+    border-radius:20px;
+    background:#08192d;
+    text-align:center;
+    box-shadow:0 0 30px cyan;
+}
+
+h1{
+    color:#33ffff;
+    text-shadow:0 0 20px cyan;
+}
+
+#count{
+    font-size:90px;
+    color:#00ffd5;
+    text-shadow:0 0 25px #00ffd5;
+    font-weight:bold;
+}
+
+p{
+    color:white;
+    font-size:24px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="card">
+<h1>Yatha's World</h1>
+<div id="count">0</div>
+<p>Live Visitors</p>
+</div>
+
+<script>
+let visits=localStorage.getItem("visits");
+
+if(visits==null){
+    visits=0;
+}
+
+visits++;
+
+localStorage.setItem("visits",visits);
+
+document.getElementById("count").innerHTML=visits;
+</script>
+
+</body>
+</html>
